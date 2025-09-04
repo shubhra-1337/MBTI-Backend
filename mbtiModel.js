@@ -1,8 +1,7 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
-const MBTI = require('./models/mbtiModel');
 
-const mbtiSeedData = {
+// This is the blueprint for a single MBTI type's data
+const mbtiSchema = new mongoose.Schema({
   ISTJ: {
     songs: ["Beethoven – Symphony No.5", "Yiruma – River Flows in You", "Coldplay – Clocks", "John Mayer – Stop This Train", "A. R. Rahman – Vande Mataram", "Arijit Singh – Agar Tum Saath Ho (Tamasha)", "Shankar-Ehsaan-Loy – Mitwa (Kabhi Alvida Naa Kehna)", "Sonu Nigam – Kal Ho Naa Ho (Title Track)", "Mohit Chauhan – Tum Se Hi (Jab We Met)"],
     books: ["Atomic Habits – James Clear", "Meditations – Marcus Aurelius", "The 7 Habits of Highly Effective People – Stephen R. Covey", "Deep Work – Cal Newport", "The Checklist Manifesto – Atul Gawande", "Principles – Ray Dalio", "Essentialism – Greg McKeown", "The Power of Habit – Charles Duhigg", "Grit – Angela Duckworth", "Godaan – Munshi Premchand"],
@@ -99,32 +98,7 @@ const mbtiSeedData = {
     careers: ["CEO", "Politician", "Business Consultant", "Lawyer", "Entrepreneur", "Venture Capitalist", "Judge", "Tech Innovator", "Army General", "Corporate Strategist"],
     movies: ["The Wolf of Wall Street", "The Social Network", "The Godfather", "Gladiator", "Steve Jobs", "Sarkar (2005 – Ram Gopal Varma)", "Guru (2007 – Mani Ratnam)", "Raajneeti (2010 – Prakash Jha)", "Dangal (2016 – Nitesh Tiwari)", "Lakshya (2004 – Farhan Akhtar)"]
   }
-};
+});
 
-const seedDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to the Database to plant the seeds!');
-
-    // Clear existing data
-    await MBTI.deleteMany({});
-    console.log('🧹 Cleared old data');
-
-    // Transform mbtiSeedData into array of docs
-    const mbtiDocs = Object.entries(mbtiSeedData).map(([type, data]) => ({
-      type,
-      ...data,
-    }));
-
-    // Insert all docs at once
-    await MBTI.insertMany(mbtiDocs);
-
-    console.log('🌱 Database seeded successfully! Your MBTI data is now in the database!');
-    process.exit(0);
-  } catch (err) {
-    console.error('❌ Error seeding database:', err);
-    process.exit(1);
-  }
-};
-
-seedDB();
+// This creates the model so we can use it elsewhere
+module.exports = mongoose.model('MBTI', mbtiSchema);

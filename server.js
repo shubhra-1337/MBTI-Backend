@@ -18,7 +18,7 @@ const startServer = async () => {
     console.log("✅ MongoDB connected");
 
     // Routes
-    const mbtiRoutes = require("./routes/mbtiRoutes");
+    const mbtiRoutes = require("./mbtiRoutes");
     app.use("/mbti", mbtiRoutes);
 
     // Test route
@@ -36,6 +36,7 @@ startServer();
 
 
 startServer();
+
 
 
 

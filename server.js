@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://knowthyself-2007.netlify.app", // <-- your Netlify site URL here!
+    origin: "https://mbti-frontend-alpha.vercel.app", // <-- your Netlify site URL here!
   })
 );
 
@@ -37,6 +37,7 @@ const startServer = async () => {
 };
 
 startServer();
+
 
 
 

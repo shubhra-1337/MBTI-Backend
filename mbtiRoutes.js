@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const MBTI = require("../models/mbtiModel");
+const MBTI = require("../mbtiModel");
 
 router.get("/:type", async (req, res) => {
   try {
@@ -20,3 +20,4 @@ router.get("/:type", async (req, res) => {
 });
 
 module.exports = router;
+

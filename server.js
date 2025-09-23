@@ -7,14 +7,18 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://knowthyself-7.netlify.app", // <-- your Netlify site URL here!
+  })
+);
 
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
 
 const startServer = async () => {
   try {
-    await mongoose.connect(MONGODB_URI); // use the correct variable here
+    await mongoose.connect(MONGODB_URI);
     console.log("✅ MongoDB connected");
 
     // Routes
@@ -31,9 +35,6 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
-startServer();
-
 
 startServer();
 

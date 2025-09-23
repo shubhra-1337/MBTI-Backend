@@ -10,11 +10,11 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB connection
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
 
 const startServer = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGODB_URI); // use the correct variable here
     console.log("✅ MongoDB connected");
 
     // Routes
@@ -33,5 +33,9 @@ const startServer = async () => {
 };
 
 startServer();
+
+
+startServer();
+
 
 

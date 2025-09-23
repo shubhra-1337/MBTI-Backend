@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const MBTI = require("./models/mbtiModel");
+const MBTI = require("./mbtiModel");
 
 const mbtiSeedData = [
   {
@@ -860,3 +860,4 @@ const seedDB = async () => {
 };
 
 seedDB();
+

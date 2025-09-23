@@ -7,14 +7,30 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+
+// ✅ Allow both local + deployed frontend
+const allowedOrigins = [
+  "http://localhost:3000",              // local dev
+  "https://knowthyself-7.vercel.app",   // deployed frontend
+];
+
 app.use(
   cors({
-    origin: "knowthyself-7.vercel.app", // <-- your Netlify site URL here!
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
 
 const startServer = async () => {
   try {
@@ -37,7 +53,6 @@ const startServer = async () => {
 };
 
 startServer();
-
 
 
 

@@ -38,10 +38,10 @@ app.use(
 /* ======================
    Routes
 ====================== */
-const mbtiRoutes = require("./routes/mbtiRoutes");
+const mbtiRoutes = require("./mbtiRoutes");
 app.use("/mbti", mbtiRoutes);
 
-const visitorsRouter = require("./routes/visitors");
+const visitorsRouter = require("./visitors");
 app.use("/api/visitors", visitorsRouter);
 
 /* ======================
@@ -74,6 +74,7 @@ mongoose
     console.error("❌ MongoDB error:", err.message);
     process.exit(1);
   });
+
 
 
 

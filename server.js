@@ -1,17 +1,25 @@
-const mongoose = require("mongoose");
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 
-// Middleware
+/* ======================
+   Middleware
+====================== */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", true);
 
-// ✅ Allow both local + deployed frontend
+/* ======================
+   CORS
+====================== */
 const allowedOrigins = [
-  "http://localhost:3000",              // local dev
-  "https://knowthyself-7.vercel.app",   // deployed frontend
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://knowthyself-7.vercel.app",
+  "https://mbti-frontend-main.vercel.app",
 ];
 
 app.use(
@@ -23,38 +31,49 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
-// MongoDB connection
+/* ======================
+   Routes
+====================== */
+const mbtiRoutes = require("./routes/mbtiRoutes");
+app.use("/mbti", mbtiRoutes);
+
+const visitorsRouter = require("./routes/visitors");
+app.use("/api/visitors", visitorsRouter);
+
+/* ======================
+   Health Check
+====================== */
+app.get("/", (req, res) => {
+  res.json({ message: "Backend API running 🚀" });
+});
+
+app.get("/health", (req, res) => {
+  res.json({ status: "Server running 🚀" });
+});
+
+/* ======================
+   Start Server
+====================== */
+const PORT = process.env.PORT || 5000;
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/mbtiDB";
 
-const startServer = async () => {
-  try {
-    await mongoose.connect(MONGODB_URI);
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
     console.log("✅ MongoDB connected");
-
-    // Routes
-    const mbtiRoutes = require("./mbtiRoutes");
-    app.use("/mbti", mbtiRoutes);
-
-    // Test route
-    app.get("/", (req, res) => res.send("Server is up! 🚀"));
-
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-  } catch (err) {
-    console.error("❌ MongoDB connection error:", err.message);
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running on port ${PORT}`)
+    );
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB error:", err.message);
     process.exit(1);
-  }
-};
-
-startServer();
-
-
+  });
 
 
 
